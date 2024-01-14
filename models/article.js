@@ -4,23 +4,23 @@ const validator = require("validator");
 const article = mongoose.Schema({
   keyword: {
     type: String,
-    required: true
+    required: true,
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   text: {
     type: String,
-    required: true
+    required: true,
   },
   date: {
     type: String,
-    required: true
+    required: true,
   },
   source: {
     type: String,
-    required: true
+    required: true,
   },
   link: {
     type: String,
@@ -28,8 +28,8 @@ const article = mongoose.Schema({
     validate: {
       validator(v) {
         return validator.isURL(v);
-      }
-    }
+      },
+    },
   },
   image: {
     type: String,
@@ -37,12 +37,12 @@ const article = mongoose.Schema({
     validate: {
       validator(v) {
         return validator.isURL(v);
-      }
-    }
+      },
+    },
   },
   owner: {
-    select: false
-  }
+    select: false,
+  },
 });
 
 module.exports = mongoose.model("articles", article);

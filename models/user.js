@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 
+const UnauthorizedError = require("../utils/errors/Unauthorized");
+
 const user = mongoose.Schema({
   name: {
     type: String,
@@ -27,26 +29,29 @@ const user = mongoose.Schema({
   },
 });
 
-user.statics.findUserByCredentials = function findUserByCredentials(email, password) {
-  return this.findOne({email})
-  .select("+password")
-  .then((foundUser) => {
-    if (!foundUser) {
-      return Promise.reject(new UnauthorizedError("User not found"));
-    }
-
-    return bcrypt.compare(password, foundUser.password).then((match) => {
-      if (!match) {
+user.statics.findUserByCredentials = function findUserByCredentials(
+  email,
+  password,
+) {
+  return this.findOne({ email })
+    .select("+password")
+    .then((foundUser) => {
+      if (!foundUser) {
         return Promise.reject(new UnauthorizedError("User not found"));
       }
 
-      if (match) {
-        console.log("It's a match!");
-      }
+      return bcrypt.compare(password, foundUser.password).then((match) => {
+        if (!match) {
+          return Promise.reject(new UnauthorizedError("User not found"));
+        }
 
-      return foundUser;
-    })
-  })
-}
+        if (match) {
+          console.log("It's a match!");
+        }
 
-module.exports = mongoose.model('users', user);
+        return foundUser;
+      });
+    });
+};
+
+module.exports = mongoose.model("users", user);
