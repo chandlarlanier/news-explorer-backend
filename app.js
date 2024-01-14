@@ -13,8 +13,11 @@ app.use(cors());
 const { PORT = 3001 } = process.env;
 const routes = require("./routes");
 
+const CONNECTION =
+  process.env.CONNECTION || "mongodb://127.0.0.1:27017/news_explorer_db";
+
 mongoose.connect(
-  "mongodb://127.0.0.1:27017/news_explorer_db",
+  CONNECTION,
   (r) => {
     console.log("Connected to database", r);
   },
@@ -26,6 +29,7 @@ mongoose.connect(
 app.use(express.json());
 
 app.use(requestLogger);
+
 app.use(routes);
 
 app.use(errorLogger);

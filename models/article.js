@@ -41,6 +41,8 @@ const article = mongoose.Schema({
     },
   },
   owner: {
+    type: String,
+    required: true,
     select: false,
   },
 });

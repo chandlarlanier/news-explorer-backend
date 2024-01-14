@@ -20,7 +20,7 @@ const getCurrentUser = (req, res, next) => {
 
 const signIn = (req, res, next) => {
   const { email, password } = req.body;
-  return User.findByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       res.status(200).send({
         token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" }),

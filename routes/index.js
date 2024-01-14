@@ -7,7 +7,7 @@ const { signIn, signUp } = require("../controllers/users");
 
 const { validateSignUp, validateSignIn } = require("../middlewares/validation");
 
-const NotFoundError = require("../utils/errors/NotFound");
+const { NotFoundError } = require("../utils/errors/NotFound");
 
 router.use("/articles", articles);
 router.use("/users", users);
