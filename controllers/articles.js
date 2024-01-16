@@ -1,12 +1,13 @@
-const Article = require("../models/article");
+const articleModel = require("../models/article");
 const { BadRequestError } = require("../utils/errors/BadRequest");
 const { ForbiddenError } = require("../utils/errors/Forbidden");
 const { NotFoundError } = require("../utils/errors/NotFound");
 
-const getArticles = (req, res, next) => {
-  Article.find({})
-    .then((articles) => {
-      res.send(articles);
+const getSavedArticles = (req, res, next) => {
+  articleModel
+    .find({ owner: req.user._id })
+    .then((savedArticles) => {
+      res.send(savedArticles);
     })
     .catch(next);
 };
@@ -14,16 +15,17 @@ const getArticles = (req, res, next) => {
 const saveArticle = (req, res, next) => {
   const { keyword, title, text, date, source, link, image } = req.body;
   const owner = req.user._id;
-  return Article.create({
-    keyword,
-    title,
-    text,
-    date,
-    source,
-    link,
-    image,
-    owner,
-  })
+  return articleModel
+    .create({
+      keyword,
+      title,
+      text,
+      date,
+      source,
+      link,
+      image,
+      owner,
+    })
     .then((article) => {
       res.send(article);
     })
@@ -39,7 +41,8 @@ const saveArticle = (req, res, next) => {
 const unsaveArticle = (req, res, next) => {
   const { articleId } = req.params;
 
-  Article.findById(articleId)
+  articleModel
+    .findById(articleId)
     .orFail(() => {
       throw new NotFoundError("Invalid article ID");
     })
@@ -57,7 +60,7 @@ const unsaveArticle = (req, res, next) => {
 };
 
 module.exports = {
-  getArticles,
+  getSavedArticles,
   saveArticle,
   unsaveArticle,
 };

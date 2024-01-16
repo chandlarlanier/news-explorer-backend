@@ -4,12 +4,12 @@ const { authorize } = require("../middlewares/auth");
 const { validateArticle, validateId } = require("../middlewares/validation");
 
 const {
-  getArticles,
+  getSavedArticles,
   saveArticle,
   unsaveArticle,
 } = require("../controllers/articles");
 
-router.get("/", authorize, getArticles);
+router.get("/", authorize, getSavedArticles);
 router.post("/", authorize, validateArticle, saveArticle);
 router.delete("/:articleId", authorize, validateId, unsaveArticle);
 
