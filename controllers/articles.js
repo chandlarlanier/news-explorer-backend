@@ -43,6 +43,7 @@ const unsaveArticle = (req, res, next) => {
 
   articleModel
     .findById(articleId)
+    .select("+owner")
     .orFail(() => {
       throw new NotFoundError("Invalid article ID");
     })
