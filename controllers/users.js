@@ -40,7 +40,7 @@ const signUp = (req, res, next) => {
 
       return bcrypt
         .hash(password, 10)
-        .then((hash) => User.create({ name, email, password: hash }))
+        .then((hash) => userModel.create({ name, email, password: hash }))
         .then((newUser) => {
           res.send({
             name,
