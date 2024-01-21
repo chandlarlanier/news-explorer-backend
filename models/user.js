@@ -47,9 +47,8 @@ user.statics.findUserByCredentials = function findUserByCredentials(
 
         if (match) {
           console.log("It's a match!");
+          return foundUser;
         }
-
-        return foundUser;
       });
     });
 };
