@@ -8,7 +8,8 @@ const { ConflictError } = require("../utils/errors/Conflict");
 const { NotFoundError } = require("../utils/errors/NotFound");
 
 const getCurrentUser = (req, res, next) => {
-  userModel.findById(req.user._id)
+  userModel
+    .findById(req.user._id)
     .orFail(() => {
       throw new NotFoundError("User not found");
     })
@@ -20,10 +21,12 @@ const getCurrentUser = (req, res, next) => {
 
 const signIn = (req, res, next) => {
   const { email, password } = req.body;
-  return userModel.findUserByCredentials(email, password)
+  return userModel
+    .findUserByCredentials(email, password)
     .then((user) => {
       res.status(200).send({
         token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" }),
+        user: user,
       });
     })
     .catch(next);
@@ -32,7 +35,8 @@ const signIn = (req, res, next) => {
 const signUp = (req, res, next) => {
   const { name, email, password } = req.body;
 
-  userModel.findOne({ email })
+  userModel
+    .findOne({ email })
     .then((existingUser) => {
       if (existingUser) {
         throw new ConflictError("User with this email already exists");
